@@ -20,6 +20,12 @@ import org.hibernate.validator.constraints.Email;
 public class Spitter {
 
     private Long id;
+    private boolean updateByEmail;
+     private String fullName;
+
+    public String getFullName() {
+        return fullName;
+    }
 
     @NotNull
     @Size(min = 5, max = 16, message="{username.size}")
@@ -114,6 +120,10 @@ public class Spitter {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    public boolean isUpdateByEmail() {
+    return updateByEmail;
+  }
 
     @Override
     public boolean equals(Object that) {
@@ -124,4 +134,13 @@ public class Spitter {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this, "firstName", "lastName", "username", "password", "email");
     }
+    
+    public Spitter(Long id, String username, String password, String fullName, String email, boolean updateByEmail) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.fullName = fullName;
+    this.email = email;
+    this.updateByEmail = updateByEmail;
+  }
 }

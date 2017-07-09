@@ -5,6 +5,13 @@
  */
 package gy.salano.springweb.confg;
 
+import gy.salano.springweb.data.JdbcSpitterRepository;
+import gy.salano.springweb.data.SpitterRepository;
+import java.io.IOException;
+import javax.servlet.ServletContext;
+import javax.sql.DataSource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,6 +25,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jndi.JndiObjectFactoryBean;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 /**
  *
@@ -26,7 +50,11 @@ import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("gy.salano.springweb")
-public class WebConfig extends WebMvcConfigurerAdapter {
+@Import({SecurityConfig.class})
+public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
 
     /*@Bean
     public ViewResolver viewResolver() {
@@ -39,7 +67,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         //resolver.setExposeContextBeansAsAttributes(true);
         return resolver;
     }*/
-
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource
@@ -49,7 +76,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return messageSource;
     }
 
-    @Bean
+    /*@Bean
     public TilesConfigurer tilesConfigurer() {
         TilesConfigurer tiles = new TilesConfigurer();
         tiles.setDefinitions(new String[]{
@@ -62,6 +89,39 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ViewResolver viewResolver() {
         return new TilesViewResolver();
+    }*/
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(templateEngine());
+        resolver.setCharacterEncoding("UTF-8");
+        return resolver;
+    }
+
+    @Bean
+    public TemplateEngine templateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setEnableSpringELCompiler(true);
+        engine.addDialect(new LayoutDialect());
+        engine.addDialect(new SpringSecurityDialect());
+        engine.setTemplateResolver(templateResolver());
+        return engine;
+    }
+
+    private ITemplateResolver templateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/WEB-INF/templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setCacheable(false);
+        resolver.getCacheablePatternSpec().addPattern("/*");
+        return resolver;
     }
 
     @Override
@@ -70,11 +130,48 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         configurer.enable();
     }
 
+    @Bean
+    public MultipartResolver multipartResolver() throws IOException {
+        return new StandardServletMultipartResolver();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**");
-        registry.addResourceHandler("/resources/");
+
+        registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         super.addResourceHandlers(registry);
     }
+
+    
+
+    /*@Bean
+    public BasicDataSource dataSource() {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName("org.h2.Driver");
+        ds.setUrl("jdbc:h2:tcp://localhost/~/spitter");
+        ds.setUsername("sa");
+        ds.setPassword("");
+        ds.setInitialSize(5);
+        ds.setMaxTotal(10);
+        return ds;
+    }*/
+    //Embedded datasource
+    /*@Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .addScript("classpath:schema.sql")
+                .addScript("classpath:test-data.sql")
+                .build();
+    }*/
+    //Spring JDBC Template
+    /*@Bean
+    public SpitterRepository getSpitterRepository() {
+        return new JdbcSpitterRepository(dataSource());
+    }*/
+    
+    
+    
+    
 }

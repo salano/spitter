@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <title>Spittr</title>
+        <link rel="stylesheet"
+              type="text/css"
+              th:href="@{/resources/style.css}"></link>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+            <title>Hello world page</title>
+            <link rel="stylesheet" href="/resources/css/hello.css"/>
+    </head>
+    <body>
+        <h1>Welcome to Spittr</h1>
+        
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            Hello <span sec:authentication="name">someone</span>
+        </div>
+        <span sec:authorize-url="/admin">
+            <br/><a th:href="@{/admin}">Admin</a>
+        </span>
+        <div layout:fragment="page-content">
+            <a th:href="@{/spittles}" class="btn btn-primary">Spittles</a> |
+            <a th:href="@{/spitter/register}" class="btn btn-primary">Register</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </body>
+    <th:block layout:fragment="scripts">
+        <script src="/js/hello.js"></script>
+    </th:block>
+</html>

@@ -6,7 +6,9 @@
 package gy.salano.springweb.controller;
 
 import gy.salano.springweb.data.SpittleRepository;
+import gy.salano.springweb.exceptions.SpittleNotFoundException;
 import gy.salano.springweb.libs.Spittle;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,20 +43,31 @@ public class SpittleController {
         return "spittles";
     }
 
-   /* @RequestMapping(method = RequestMethod.GET)
+    /* @RequestMapping(method = RequestMethod.GET)
     public List<Spittle> spittles(
             @RequestParam(value = "max",
                     defaultValue = "MAX_LONG_AS_STRING") long max,
             @RequestParam(value = "count", defaultValue = "20") int count) {
         return spittleRepository.findSpittles(max, count);
     }*/
-
     @RequestMapping(value = "/{spittleId}", method = RequestMethod.GET)
     public String spittle(
             @PathVariable("spittleId") long spittleId,
             Model model) {
+        if (spittleRepository.findOne(spittleId) == null) {
+            throw new SpittleNotFoundException();
+        }
         model.addAttribute(spittleRepository.findOne(spittleId));
         return "spittle";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String saveSpittle(Spittle form, Model model) {
+        /*spittleRepository.save(
+                new Spittle(null, form.getMessage(), new Date(),
+                        form.getLongitude(), form.getLatitude()));*/
+        
+        return "redirect:/spittles";
     }
 
 }

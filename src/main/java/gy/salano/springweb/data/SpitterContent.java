@@ -6,13 +6,14 @@
 package gy.salano.springweb.data;
 
 import gy.salano.springweb.libs.Spitter;
+import gy.salano.springweb.libs.SpitterForm;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * @author salano
  */
-@Component
+@Component("SpitterContent")
 public class SpitterContent implements SpitterRepository {
 
     @Override

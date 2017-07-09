@@ -10,5 +10,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<a href="<c:url value="/" />" ><img src="<c:url value="../resources/images/spitter_logo_50.png" />" /></a>
+<a href="<c:url value="/" />" ><img src="<c:url value="/images/spitter_logo_50.png" />" /></a>
 

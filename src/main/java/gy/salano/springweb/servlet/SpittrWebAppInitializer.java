@@ -43,7 +43,7 @@ public class SpittrWebAppInitializer extends AbstractAnnotationConfigDispatcherS
     @Override
     public void onStartup(ServletContext sc) throws ServletException{
         super.onStartup(sc);
-        sc.setInitParameter("spring.profiles.active", "production");
+        sc.setInitParameter("spring.profiles.active", "qa");
     }
     
 }

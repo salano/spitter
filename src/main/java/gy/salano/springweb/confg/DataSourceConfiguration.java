@@ -5,27 +5,18 @@
  */
 package gy.salano.springweb.confg;
 
-import gy.salano.springweb.data.JdbcSpitterRepository;
-import gy.salano.springweb.data.SpitterRepository;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import org.springframework.jndi.JndiTemplate;
 
 /**
  *
  * @author salano
  */
 @Configuration
+//@ImportResource("classpath:applicationContext.xml")
 public class DataSourceConfiguration {
 
     /*@Profile("development")
@@ -57,16 +48,15 @@ public class DataSourceConfiguration {
         dataSource.setPassword("");*/
  /* return dataSource;
     }*/
-    @Profile("production")
+    //Working Solution
+    /*@Profile("production")
     @Bean
     public DataSource dataSource() throws NamingException {
 
-        /*JndiObjectFactoryBean jndiObjectFactoryBean
-                = new JndiObjectFactoryBean();
-        jndiObjectFactoryBean.setJndiName("jdbc/SpittrDS");
-        jndiObjectFactoryBean.setResourceRef(true);
-        jndiObjectFactoryBean.setProxyInterface(javax.sql.DataSource.class);
-        return (DataSource) jndiObjectFactoryBean.getObject();*/
+        
+    
+    
+    /*
         JndiTemplate jndiTemplate = new JndiTemplate();
         DataSource dataSource
                 = (DataSource) jndiTemplate.lookup("java:comp/env/jdbc/SpittrDS");
@@ -79,12 +69,19 @@ public class DataSourceConfiguration {
         
         jdbcTemplate.setDataSource(dataSource());
         return jdbcTemplate;
-    }
-
-    @Bean
+    }*/
+    
+    /*@Bean
     public SpitterRepository spitterDAO() throws NamingException {
         JdbcSpitterRepository spitterDao = new JdbcSpitterRepository();
         spitterDao.setJdbcTemplate(jdbcTemplate());
         return spitterDao;
+    }*/
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
+
+    
 }

@@ -42,9 +42,9 @@ public class SpitterControllerTest {
         SpitterRepository mockRepository
                 = mock(SpitterRepository.class);
         Spitter unsaved
-                = new Spitter(Long.getLong("2"),"jbauer", "24hours", "Jack", "Bauer");
+                = new Spitter(Long.getLong("2"),"jbauer", "24hours", "Jack", "Bauer","Jack Bauer");
         Spitter saved
-                = new Spitter(24L, "jbauer", "24hours", "Jack", "Bauer");
+                = new Spitter(24L, "jbauer", "24hours", "Jack", "Bauer","Jack Bauer");
         when(mockRepository.save(unsaved)).thenReturn(saved);
         SpitterController controller
                 = new SpitterController(mockRepository);

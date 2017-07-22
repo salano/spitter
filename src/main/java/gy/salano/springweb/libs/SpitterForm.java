@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author salano
  */
+
 public class SpitterForm {
 
     public Long getId() {
@@ -99,6 +100,6 @@ public class SpitterForm {
   }
 
   public Spitter toSpitter() {
-    return new Spitter(username, password, firstName, lastName, email);
+    return new Spitter(username, password, firstName, lastName, email, firstName+" "+lastName);
   }
 }

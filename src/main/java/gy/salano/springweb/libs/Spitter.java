@@ -9,6 +9,9 @@ package gy.salano.springweb.libs;
  *
  * @author salano
  */
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,61 +19,63 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Email;
 
+@Entity
+public class Spitter implements Serializable {
 
-public class Spitter {
-
+    @javax.persistence.Id
     private Long id;
     private boolean updateByEmail;
-     private String fullName;
+    private String fullName;
 
     public String getFullName() {
         return fullName;
     }
 
     @NotNull
-    @Size(min = 5, max = 16, message="{username.size}")
+    @Size(min = 5, max = 16, message = "{username.size}")
     private String username;
 
     @NotNull
-    @Size(min = 5, max = 25, message="{password.size}")
+    @Size(min = 5, max = 25, message = "{password.size}")
     private String password;
 
     @NotNull
-    @Size(min = 2, max = 30, message="{firstName.size}")
+    @Size(min = 2, max = 30, message = "{firstName.size}")
     private String firstName;
 
     @NotNull
-    @Size(min = 2, max = 30, message="{lastName.size}")
+    @Size(min = 2, max = 30, message = "{lastName.size}")
     private String lastName;
 
     @NotNull
-    @Email(message="{email.valid}")
+    @Email(message = "{email.valid}")
     private String email;
 
     public Spitter() {
     }
 
-    public Spitter(String username, String password, String firstName, String lastName, String email) {
-        this(null, username, password, firstName, lastName, email);
+    public Spitter(String username, String password, String firstName, String lastName, String email, String fullName) {
+        this(null, username, password, firstName, lastName, email,fullName);
     }
-    
-    public Spitter(Long id, String username, String password, String firstName, String lastName) {
+
+    public Spitter(Long id, String username, String password, String firstName, String lastName,String fullName) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        
+        this.fullName = fullName;
+
     }
 
-
-    public Spitter(Long id, String username, String password, String firstName, String lastName, String email) {
+    public Spitter(Long id, String username, String password, String firstName, String lastName, String email,String fullName) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.firstName = fullName;
     }
 
     public String getUsername() {
@@ -120,10 +125,10 @@ public class Spitter {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public boolean isUpdateByEmail() {
-    return updateByEmail;
-  }
+        return updateByEmail;
+    }
 
     @Override
     public boolean equals(Object that) {
@@ -134,13 +139,13 @@ public class Spitter {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this, "firstName", "lastName", "username", "password", "email");
     }
-    
-    public Spitter(Long id, String username, String password, String fullName, String email, boolean updateByEmail) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.fullName = fullName;
-    this.email = email;
-    this.updateByEmail = updateByEmail;
-  }
+
+    public Spitter(Long id, String username, String password, String fullName, String email, boolean updateByEmail ) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.updateByEmail = updateByEmail;
+    }
 }

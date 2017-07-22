@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <title>Spittr</title>
+        <link rel="stylesheet"
+              type="text/css"
+              th:href="@{/resources/style.css}"></link>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
+    </head>
+    <body>
+        <div layout:fragment="page-content">
+            <table>
+                <tr th:each="spitter : ${Spitters}">
+                    <td th:text="${spitter.id}">1</td>
+                    <td th:text="${spitter.username}">2</td>
+
+                    <td th:text="${spitter.fullName}">Text ...</td>
+                </tr>
+            </table>
+
+
+
+        </div>
+    </body>
+</html>

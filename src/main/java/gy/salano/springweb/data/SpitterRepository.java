@@ -6,13 +6,15 @@
 package gy.salano.springweb.data;
 
 import gy.salano.springweb.libs.Spitter;
-import gy.salano.springweb.libs.SpitterForm;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author salano
  */
-public interface SpitterRepository {
+@Repository
+public interface SpitterRepository extends JpaRepository<Spitter, Long>{
     Spitter save(Spitter spitter);
     Spitter findByUsername(String username);
 }

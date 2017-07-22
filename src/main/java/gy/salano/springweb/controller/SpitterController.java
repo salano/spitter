@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/spitter")
 public class SpitterController {
 
+    //@Autowired
     private SpitterRepository spitterRepository;
 
     @Autowired
@@ -39,7 +40,7 @@ public class SpitterController {
             SpitterRepository spitterRepository) {
         this.spitterRepository = spitterRepository;
     }
-
+    
     @RequestMapping(value = "/register", method = GET)
     public String showRegistrationForm(Model model) {
         model.addAttribute("SpitterForm",new SpitterForm());
@@ -69,5 +70,12 @@ public class SpitterController {
                     spitterRepository.findByUsername(username));
         }
         return "profile";
+    }
+    
+    @RequestMapping(value = "/all", method = GET)
+    public String showSpitters(Model model){
+        model.addAttribute("Spitters",spitterRepository.findAll());
+        //System.out.println(spitterRepository.findAll());
+        return "spitterlist";
     }
 }
